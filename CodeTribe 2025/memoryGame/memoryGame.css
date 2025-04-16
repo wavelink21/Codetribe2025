@@ -1,0 +1,55 @@
+/* style.css */
+body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column; /* Arrange items vertically */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #633636;
+    color: white; /* Set default text color to white for better visibility */
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    grid-template-rows: repeat(4, 100px);
+    gap: 10px;
+    margin-bottom: 20px; /* Add some space between the board and instructions */
+}
+
+.card {
+    width: 100px;
+    height: 100px;
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    user-select: none;
+    color: #333; /* Default text color for cards */
+}
+
+.card.flipped {
+    background-color: #eee;
+    color: #333;
+}
+
+.card.matched {
+    background-color: #aaffaa;
+    color: green;
+    cursor: default;
+}
+
+.instructions {
+    text-align: center;
+    margin-top: 20px; /* Add some space above the instructions */
+}

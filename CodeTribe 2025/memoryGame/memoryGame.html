@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Play</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="memoryGame.css"> </head>
+<body>
+    <h2>Ready Player One!</h2>
+    <div class="game-board">
+    </div>
+    <p class="instructions">Click on two cards to find matching pairs.</p>
+
+<script>
+    const gameBoard = document.querySelector('.game-board');
+    let cards = [];
+    let flippedCards = [];
+    let matchedPairs = 0;
+    const totalPairs = 8;
+    let canFlip = true; // Prevent flipping more than two cards at once
+
+    // Create the deck of cards with pairs of letters A-H
+    function createDeck() {
+        const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+        const deck = [...letters, ...letters]; // Create two of each letter
+        shuffleDeck(deck);
+        return deck;
+    }
+
+    // Shuffle the deck using Fisher-Yates algorithm
+    function shuffleDeck(deck) {
+        for (let i = deck.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [deck[i], deck[j]] = [deck[j], deck[i]];
+        }
+    }
+
+    // Create the HTML for each card and add it to the board
+    function setupBoard() {
+        const deck = createDeck();
+        for (let i = 0; i < 16; i++) {
+            const cardDiv = document.createElement('div');
+            cardDiv.classList.add('card');
+            cardDiv.dataset.index = i;
+            cardDiv.dataset.letter = deck[i];
+            cardDiv.addEventListener('click', flipCard);
+            gameBoard.appendChild(cardDiv);
+            cards.push(cardDiv);
+        }
+    }
+
+    function flipCard() {
+        if (!canFlip || flippedCards.length === 2 || this.classList.contains('flipped') || this.classList.contains('matched')) {
+            return;
+        }
+
+        this.classList.add('flipped');
+        this.textContent = this.dataset.letter;
+        flippedCards.push(this);
+
+        if (flippedCards.length === 2) {
+            canFlip = false;
+            setTimeout(checkForMatch, 1000);
+        }
+    }
+
+    function checkForMatch() {
+        const card1 = flippedCards[0];
+        const card2 = flippedCards[1];
+
+        if (card1.dataset.letter === card2.dataset.letter) {
+            card1.classList.add('matched');
+            card2.classList.add('matched');
+            matchedPairs++;
+            if (matchedPairs === totalPairs) {
+                setTimeout(() => {
+                    alert('Congratulations! You found all the pairs!');
+                    resetGame();
+                }, 500);
+            }
+        } else {
+            setTimeout(() => {
+                card1.classList.remove('flipped');
+                card2.classList.remove('flipped');
+                card1.textContent = '';
+                card2.textContent = '';
+            }, 1000);
+        }
+
+        flippedCards = [];
+        canFlip = true;
+    }
+
+    function resetGame() {
+        gameBoard.innerHTML = '';
+        cards = [];
+        flippedCards = [];
+        matchedPairs = 0;
+        canFlip = true;
+        setupBoard();
+    }
+
+    // Start the game when the page loads
+    setupBoard();
+</script>
+
+</body>
+</html>
